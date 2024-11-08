@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<title>Test</title>
+		<link rel="icon" href="data:;base64,=">
+	</head>
+	<body>
+		<button id="suggestion-tab" class="tablink" onclick="onPageSelect('suggestions', this, '#86B8DB')" >0 Vorschläge</button>
+		<button id="interested-tab" class="tablink" onclick="onPageSelect('interested', this, '#7CA982')">0 Interesse</button>
+		<button id="trash-tab" class="tablink" onclick="onPageSelect('trash', this, '#E87461')">0 Verworfen</button>
+
+		<div id="suggestions" class="tab tabcontent suggestion-color"> </div>
+		<div id="interested" class="tab tabcontent interested-color"> </div>
+		<div id="trash" class="tab tabcontent trash-color"> </div>
+	</body>
+
+	<script type="text/javascript">
+
+var games = [
+	{
+		name: "Subnautica",
+		thumbnail: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/264710/header.jpg",
+		steam: "https://store.steampowered.com/app/264710/Subnautica/?l=german",
+	},
+	{
+		name: "Dredge",
+		thumbnail: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1562430/header.jpg",
+		steam: "https://store.steampowered.com/app/1562430/DREDGE/?l=german",
+	},
+	{
+		name: "Disco Elysium",
+		thumbnail: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/632470/header.jpg",
+		steam: "https://store.steampowered.com/app/632470/Disco_Elysium__The_Final_Cut/?l=german",
+	},
+	{
+		name: "A Short Hike",
+		thumbnail: "https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1055540/header.jpg",
+		steam: "https://store.steampowered.com/app/1055540/A_Short_Hike/?l=german",
+	},
+	{
+		name: "Firewatch",
+		thumbnail: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/383870/header.jpg",
+		steam: "https://store.steampowered.com/app/383870/Firewatch/?l=german",
+	},
+	{
+		name: "Call of the Sea",
+		thumbnail: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1042490/header.jpg",
+		steam: "https://store.steampowered.com/app/1042490/Call_of_the_Sea/?l=german",
+	},
+	{
+		name: "(nur PC!)Lorelei and the Laser Eyes",
+		thumbnail: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2008920/header.jpg",
+		steam: "https://store.steampowered.com/app/2008920/Lorelei_and_the_Laser_Eyes/?l=german",
+	},
+	{
+		name: "Detroit: Become Human",
+		thumbnail: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1222140/header.jpg",
+		steam: "https://store.steampowered.com/app/1222140/Detroit_Become_Human/?l=german",
+	},
+	{
+		name: "What Remains of Edith Finch",
+		thumbnail: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/501300/header.jpg",
+		steam: "https://store.steampowered.com/app/501300/What_Remains_of_Edith_Finch/?l=german",
+	},
+	{
+		name: "We Were Here Forever",
+		thumbnail: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1341290/header.jpg",
+		steam: "https://store.steampowered.com/app/1341290/We_Were_Here_Forever/?l=german",
+	},
+	{
+		name: "Ghost Of A Tale",
+		thumbnail: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/417290/header.jpg",
+		steam: "https://store.steampowered.com/app/417290/Ghost_of_a_Tale/?l=german",
+	},
+	{
+		name: "Untitled Goose Game",
+		thumbnail: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/837470/header.jpg",
+		steam: "https://store.steampowered.com/app/837470/Untitled_Goose_Game/?l=german",
+	},
+	{
+		name: "Inscryption",
+		thumbnail: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1092790/header.jpg",
+		steam: "https://store.steampowered.com/app/1092790/Inscryption/?l=german",
+		youtube: "https://www.youtube.com/watch?v=-QLXoAHobiU",
+	},
+	{
+		name: "Outer Wilds",
+		thumbnail: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/753640/header.jpg",
+		steam: "https://store.steampowered.com/app/753640/Outer_Wilds/?l=german",
+		playstation: "https://www.playstation.com/de-de/games/outer-wilds/",
+	},
+	{
+		name: "Return to Monkey Island",
+		thumbnail: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2060130/header.jpg",
+		steam: "https://store.steampowered.com/app/2060130/Return_to_Monkey_Island/?l=german",
+	},
+	{
+		name: "GRIS",
+		thumbnail: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/683320/header.jpg",
+		steam: "https://store.steampowered.com/app/683320/GRIS/?l=german",
+		youtube: "https://www.youtube.com/watch?v=Ea6KIWbYfEU",
+	},
+	{
+		name: "Journey",
+		thumbnail: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/638230/header.jpg",
+		steam: "https://store.steampowered.com/app/638230/Journey/?l=german",
+		playstation: "https://store.playstation.com/de-de/product/EP9000-CUSA00470_00-JOURNEYPS4061115",
+		youtube: "https://www.youtube.com/watch?v=YwCFUSdKfnE",
+	},
+	{
+		name: "Stray",
+		thumbnail: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1332010/header.jpg",
+		steam: "https://store.steampowered.com/app/1332010/Stray/?l=german",
+		youtube: "https://www.youtube.com/watch?v=BjzNtKCko7E",
+	},
+]
+
+const GameState = {
+	INIT: "0",
+	SUGGESTED: "1",
+	INTERESTED: "2",
+	TRASH: "3",
+}
+
+function update() {
+	const suggestions = document.getElementById("suggestions")
+	const interested = document.getElementById("interested")
+	const trash = document.getElementById("trash")
+	while (suggestions.firstChild) { suggestions.removeChild(suggestions.lastChild) }
+	while (interested.firstChild) { interested.removeChild(interested.lastChild) }
+	while (trash.firstChild) { trash.removeChild(trash.lastChild) }
+	for (let i = games.length-1; i >= 0; i--) {
+		let game = games[i]
+		let state = localStorage.getItem(i) ?? GameState.INIT;
+		let div;
+		let interestedBtnClass, trashBtnClass, suggestionBtnClass;
+		switch (state) {
+			case GameState.INIT:
+			case GameState.SUGGESTED:
+				[interestedBtnClass, trashBtnClass, suggestionBtnClass] = ["right-btn", "left-btn", "hidden"]
+				div = suggestions;
+				break;
+			case GameState.INTERESTED:
+				[interestedBtnClass, trashBtnClass, suggestionBtnClass] = ["hidden", "left-btn", "right-btn"]
+				div = interested;
+				break;
+			case GameState.TRASH:
+				[interestedBtnClass, trashBtnClass, suggestionBtnClass] = ["right-btn", "hidden", "left-btn"]
+				div = trash;
+				break;
+			default:
+				console.error("game" + i + " has invalid GameState=" + state)
+				break;
+		}
+		div.insertAdjacentHTML('beforeend',
+			`<div id="game${i}" data-gameid="${i}" class="game">
+				<img class="thumbnail" src="${ game.thumbnail }"/>
+				<div class="game-hover">
+					<div class="title">${ game['name'] }</div>
+					<button type="button" class="${ interestedBtnClass } interested-color game-btn">Interesse</button>
+					<button type="button" class="${ trashBtnClass } trash-color game-btn">Verwerfen</button>
+					<button type="button" class="${ suggestionBtnClass } suggestion-color game-btn">Vorschlagen</button>
+					<button class="link-btn">
+						<img src="steam.svg" class="link-icon" onclick=" window.open('${ game.steam }','_blank')">
+					</button>`
+					+ (() => {
+						if (!game.youtube) return "";
+						return `<button class="link-btn">
+								<img src="youtube.svg" class="link-icon" onclick=" window.open('${ game.youtube }','_blank')">
+							</button>`
+					})()
+					+ `
+				</div>
+			</div>`
+		)
+	}
+	document.querySelectorAll(".game").forEach((game) => {
+		const index = game.dataset.gameid
+		const [interested, trash, suggestion] = game.getElementsByTagName("button")
+		interested.onclick = () => {
+			localStorage.setItem(index, GameState.INTERESTED);
+			update()
+		}
+		trash.onclick = () => {
+			localStorage.setItem(index, GameState.TRASH);
+			update()
+		}
+		suggestion.onclick = () => {
+			localStorage.setItem(index, GameState.SUGGESTED);
+			update()
+		}
+	})
+
+	const updateHeaderCount = (tabNameId, divToCountId) => {
+		let [count, name] = document.getElementById(tabNameId).textContent.split(" ")
+		return document.getElementById(divToCountId).children.length + " " + name
+	}
+	document.getElementById("suggestion-tab").textContent = updateHeaderCount("suggestion-tab", "suggestions")
+	document.getElementById("interested-tab").textContent = updateHeaderCount("interested-tab", "interested")
+	document.getElementById("trash-tab").textContent = updateHeaderCount("trash-tab", "trash")
+}
+
+
+document.addEventListener('DOMContentLoaded', function() {
+	update()
+});
+
+function onPageSelect(pageId, element, color) {
+	var tabcontent = document.getElementsByClassName("tabcontent");
+	for (let i = 0; i < tabcontent.length; i++) {
+		tabcontent[i].style.display = "none";
+	}
+
+	var tablinks = document.getElementsByClassName("tablink");
+	for (let i = 0; i < tablinks.length; i++) {
+		tablinks[i].style.backgroundColor = "";
+	}
+
+	document.getElementById(pageId).style.display = "flex";
+	element.style.backgroundColor = color;
+	document.body.style.backgroundColor = color
+}
+
+document.getElementById("suggestion-tab").click();
+
+	</script>
+
+	<style type="text/css" media="screen">
+
+/* Set height of body and the document to 100% to enable "full page tabs" */
+body, html {
+  height: 100%;
+  margin: 0;
+  font-family: Arial;
+}
+
+/* Style tab links */
+.tablink {
+	background-color: #555;
+	color: white;
+	float: left;
+	border: none;
+	outline: none;
+	cursor: pointer;
+	padding: 14px 16px;
+	font-size: 17px;
+	width: calc(100% * 1/3);
+}
+
+.tablink:hover {
+	background-color: #777;
+}
+
+/* Style the tab content (and add height:100% for full page content) */
+.tabcontent {
+	color: white;
+	display: none;
+	padding-top: 80px;
+	padding-bottom: 40px;
+	padding-right: 20px;
+	padding-left: 20px;
+	<!-- height: 100%; -->
+}
+
+.tab {
+	flex-wrap: wrap;
+	justify-content: center;
+	/* justify-content: space-around; */
+	align-content: flex-start;
+}
+
+
+/* ---------- suggestions ----------- */
+.game {
+	position: relative;
+}
+
+.thumbnail {
+	display: block;
+	opacity: 1;
+	transition: .5s ease;
+	backface-visibility: hidden;
+}
+
+.game-hover {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	transition: .5s ease;
+	opacity: 0;
+}
+
+.game:hover .thumbnail {
+	opacity: 0.2;
+}
+
+.game:hover .game-hover {
+	opacity: 1;
+}
+
+.title {
+	color: black;
+	font-size: 25px;
+	position: absolute;
+	top: 20%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	text-align: center;
+	font-weight: bold;
+	width: 90%;
+}
+
+.game-btn {
+	display: block;
+	position: absolute;
+	bottom: 0;
+	width: 50%;
+	border: none;
+	padding: 14px 28px;
+	font-size: 16px;
+	cursor: pointer;
+	text-align: center;
+	transition: 0.3s;
+}
+
+.game-btn:hover {
+	filter: brightness(115%)
+}
+
+.interested-color { background-color: #7CA982; }
+.trash-color { background-color: #E87461; }
+.suggestion-color { background-color: #86B8DB; }
+
+.left-btn {
+	left: 0;
+}
+
+.right-btn {
+	right: 0;
+}
+
+.hidden {
+	display:none;
+}
+
+.link-btn {
+	background-color: rgba(1, 1, 1, 0);
+	height: 60px;
+	width: 60px;
+	border: none;
+	outline: none;
+	cursor: pointer;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+.link-icon {
+	width: 100%;
+	height: 100%;
+}
+.link-icon:hover {
+	transform: translateY(2px);
+	transition: 0.2s;
+}
+
+	</style>
+</html>
